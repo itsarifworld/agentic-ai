@@ -1,0 +1,92 @@
+MICROSOFT FOUNDRY — DEVELOP YOUR FIRST AGENT
+
+1. CREATE A FOUNDRY PROJECT
+- Go to https://ai.azure.com
+- Sign in with Azure account.
+- Enable "New Foundry" if available.
+- Create a new project:
+  • Foundry Resource: unique name
+  • Subscription: Azure subscription
+  • Resource Group: create/select
+  • Region: recommended region
+- Wait for project creation.
+
+2. DEPLOY A MODEL
+- Discover → Models
+- Search: gpt-4.1-mini
+- Open model page.
+- Click Deploy (default settings).
+- Wait for deployment.
+- Model Playground opens.
+
+Alternative models:
+- gpt-4.1-nano
+- gpt-4o-mini
+
+3. CHAT WITH THE MODEL
+Example prompts:
+- Who was Ada Lovelace?
+- Tell me more about her work with Charles Babbage.
+- Tell me about the ELIZA chatbot.
+- How does it compare with modern LLMs?
+
+Use "New Chat" to clear conversation history.
+
+4. ADD A SYSTEM PROMPT
+Instructions:
+
+You are an expert in the history of computing and AI.
+You only answer questions about significant people and
+events in the development of computing, and about notable
+vintage computers. Do not engage in conversations on any
+topic that is unrelated to computing history.
+
+Test:
+- What was Alan Turing's contribution to AI?
+- What's the capital of Spain? (should refuse/off-topic)
+
+5. ADD WEB SEARCH TOOL
+- Expand Tools section.
+- Add → Web Search.
+- Model can now search the internet for current information.
+
+Example:
+- Find a vintage computer store near Seattle.
+
+6. SAVE AS AN AGENT
+- Click Save as agent.
+- Name: computing-historian
+
+Agent contains:
+- Model
+- Instructions
+- Parameters
+- Tools
+
+7. AGENT YAML STRUCTURE
+Includes:
+- Model (gpt-4.1-mini)
+- Instructions
+- Temperature
+- Top_p
+- Tools (web_search)
+
+8. TEST THE AGENT
+Prompt:
+- Who are you?
+
+Expected:
+- Agent identifies itself as a computing historian.
+
+9. PREVIEW WEB APP
+- Publish → Preview web app
+- Opens a chat interface
+
+Example:
+- What can you tell me about the Altair 8800?
+
+WORKFLOW SUMMARY
+Project → Deploy Model → Chat → Add Instructions → Add Web Search → Save as Agent → Test Agent → Preview Web App
+
+KEY CONCEPT
+Agent = Model + Instructions + Tools + Configuration
