@@ -1,0 +1,709 @@
+
+MICROSOFT FOUNDRY AGENT DEVELOPMENT MASTER NOTES
+================================================
+
+PURPOSE
+-------
+These notes are designed as a complete learning and revision guide for:
+- Microsoft Foundry
+- AI Agents
+- Azure AI Projects SDK
+- OpenAI Responses API
+- VS Code Foundry Toolkit
+- Agent Publishing
+- Flask Client Applications
+- Interview Preparation
+- Troubleshooting
+
+====================================================================
+SECTION 1: BIG PICTURE ARCHITECTURE
+====================================================================
+
+                    +-------------------+
+                    |   User Browser    |
+                    +---------+---------+
+                              |
+                              v
+                    +-------------------+
+                    | Flask Web App     |
+                    | app.py            |
+                    +---------+---------+
+                              |
+                              v
+                    +-------------------+
+                    | AgentClient       |
+                    | agent_client.py   |
+                    +---------+---------+
+                              |
+                              v
+                    +-------------------+
+                    | OpenAI Client     |
+                    | Responses API     |
+                    +---------+---------+
+                              |
+                              v
+                    +-------------------+
+                    | Published Agent   |
+                    | Microsoft Foundry |
+                    +---------+---------+
+                              |
+                              v
+                    +-------------------+
+                    | GPT-4.1-mini      |
+                    | + Tools           |
+                    +-------------------+
+
+FLOW:
+
+User enters prompt
+    ↓
+Flask receives request
+    ↓
+AgentClient sends request
+    ↓
+OpenAI Responses API called
+    ↓
+Published Foundry Agent executes
+    ↓
+Model generates answer
+    ↓
+Response returned to Flask
+    ↓
+Displayed in Browser
+
+====================================================================
+SECTION 2: WHAT IS MICROSOFT FOUNDRY?
+====================================================================
+
+Microsoft Foundry is Microsoft's platform for building AI applications,
+AI agents, and enterprise AI solutions.
+
+It provides:
+
+1. Model hosting
+2. Agent development
+3. Prompt management
+4. Tool integration
+5. Evaluation
+6. Deployment
+7. Monitoring
+
+Think of Foundry as:
+
+"Azure + OpenAI + Agent Framework + Deployment Platform"
+
+====================================================================
+SECTION 3: WHAT IS AN AGENT?
+====================================================================
+
+Normal LLM:
+
+Input → Model → Output
+
+Agent:
+
+Input
+ ↓
+Reasoning
+ ↓
+Tool Usage
+ ↓
+External Data Access
+ ↓
+Final Answer
+
+Agents can:
+
+- Search the web
+- Call APIs
+- Access databases
+- Maintain conversations
+- Execute workflows
+
+Example:
+
+User:
+"What was ENIAC?"
+
+Agent:
+1. Understands question
+2. Searches knowledge/tool
+3. Generates answer
+4. Returns response
+
+====================================================================
+SECTION 4: FOUNDRY TOOLKIT
+====================================================================
+
+Purpose
+-------
+
+Foundry Toolkit integrates Foundry directly into VS Code.
+
+Benefits:
+
+- Create agents
+- Edit prompts
+- Manage versions
+- Generate code
+- Test agents
+- Connect Azure resources
+
+Installation
+------------
+
+Extensions
+→ Search
+
+Foundry Toolkit
+
+Install
+
+Wait until installation finishes.
+
+Common Issue
+------------
+
+Extension not loading.
+
+Fix:
+
+1. Restart VS Code
+2. Re-sign into Azure
+3. Update extension
+
+====================================================================
+SECTION 5: CONNECTING TO AZURE
+====================================================================
+
+Step 1
+
+Open Foundry Toolkit.
+
+Step 2
+
+Expand:
+
+Microsoft Foundry Resources
+
+Step 3
+
+Sign in.
+
+Authentication Flow:
+
+VS Code
+   ↓
+Azure Login
+   ↓
+Subscription Access
+   ↓
+Foundry Project Access
+
+====================================================================
+SECTION 6: AGENT CREATION
+====================================================================
+
+Agent Name:
+
+computing-history
+
+Model:
+
+gpt-4.1-mini
+
+Instructions:
+
+You are an expert in the history of computing and AI.
+
+Tool:
+
+Web Search
+
+Why Web Search?
+
+Without tool:
+Agent only knows training data.
+
+With tool:
+Agent can retrieve newer information.
+
+====================================================================
+SECTION 7: VERSIONING
+====================================================================
+
+Agents support versions.
+
+Example:
+
+Version 1
+Version 2
+Version 3
+
+Benefits:
+
+- Rollback capability
+- Testing changes
+- Safe deployment
+
+====================================================================
+SECTION 8: PYTHON ENVIRONMENT
+====================================================================
+
+Why Virtual Environment?
+
+Without venv:
+
+Packages installed globally.
+
+Problems:
+
+- Dependency conflicts
+- Version mismatches
+
+With venv:
+
+Project isolated.
+
+Create:
+
+Cmd + Shift + P
+
+Python: Create Environment
+
+Select:
+
+Venv
+
+Expected:
+
+.venv/
+
+created.
+
+====================================================================
+SECTION 9: GENERATED AGENT CODE
+====================================================================
+
+Foundry Toolkit generates starter code.
+
+Main libraries:
+
+from azure.ai.projects import AIProjectClient
+
+from azure.identity import DefaultAzureCredential
+
+Purpose:
+
+Connect Python code to Foundry project.
+
+====================================================================
+SECTION 10: AZURE AUTHENTICATION
+====================================================================
+
+Command:
+
+az login
+
+Why needed?
+
+Agent uses Entra ID authentication.
+
+Flow:
+
+User
+ ↓
+Azure Login
+ ↓
+Access Token
+ ↓
+OpenAI Client
+ ↓
+Agent Endpoint
+
+====================================================================
+SECTION 11: OPENAI RESPONSES API
+====================================================================
+
+Old Style:
+
+chat.completions.create()
+
+New Style:
+
+responses.create()
+
+Microsoft recommends Responses API for agents.
+
+Example:
+
+response = client.responses.create(
+    input="Hello"
+)
+
+====================================================================
+SECTION 12: CLIENT APPLICATION ARCHITECTURE
+====================================================================
+
+Files:
+
+computer-history-client/
+
+├── .env
+├── agent_client.py
+├── app.py
+├── requirements.txt
+└── README.md
+
+Purpose of Each File
+--------------------
+
+.env
+Configuration
+
+agent_client.py
+Communicates with agent
+
+app.py
+Flask web application
+
+requirements.txt
+Dependencies
+
+README.md
+Documentation
+
+====================================================================
+SECTION 13: ENVIRONMENT VARIABLES
+====================================================================
+
+Example:
+
+AGENT_ENDPOINT=xxxxx
+
+Why use .env?
+
+Never hardcode:
+
+- URLs
+- Keys
+- Secrets
+
+Benefits:
+
+- Security
+- Portability
+- Easy deployment
+
+====================================================================
+SECTION 14: AGENT_CLIENT.PY DEEP EXPLANATION
+====================================================================
+
+Key Imports
+-----------
+
+from azure.identity import DefaultAzureCredential
+from azure.identity import get_bearer_token_provider
+from openai import OpenAI
+
+Purpose:
+
+DefaultAzureCredential
+→ obtains Azure token
+
+get_bearer_token_provider
+→ generates authentication token
+
+OpenAI
+→ communicates with endpoint
+
+Client Creation
+---------------
+
+self.client = OpenAI(...)
+
+Creates connection between app and agent.
+
+Authentication Scope:
+
+https://ai.azure.com/.default
+
+This tells Azure which resource we need access to.
+
+====================================================================
+SECTION 15: CONVERSATION MEMORY
+====================================================================
+
+Conversation history stored as:
+
+[
+  {"role":"user"},
+  {"role":"assistant"}
+]
+
+Benefits:
+
+- Follow-up questions work
+- Context retained
+
+Example:
+
+User:
+What was ENIAC?
+
+User:
+How does it compare to COLOSSUS?
+
+Agent understands context.
+
+====================================================================
+SECTION 16: FLASK APPLICATION
+====================================================================
+
+Purpose:
+
+Creates web interface.
+
+Run:
+
+python app.py
+
+Starts:
+
+http://localhost:5000
+
+Browser
+ ↓
+Flask
+ ↓
+AgentClient
+ ↓
+Foundry Agent
+
+====================================================================
+SECTION 17: PUBLISHING AGENT
+====================================================================
+
+Foundry
+→ Build
+→ Agents
+→ computing-historian
+
+Publish
+→ Details
+
+Copy:
+
+Responses Protocol Endpoint
+
+This endpoint is used by applications.
+
+====================================================================
+SECTION 18: COMMON REAL-WORLD ERRORS
+====================================================================
+
+ERROR 1
+
+Command Palette Missing
+
+Fix:
+
+View → Command Palette
+
+or
+
+Cmd + Shift + P
+
+------------------------------------------------
+
+ERROR 2
+
+Python Extension Missing
+
+Symptoms:
+
+Python commands unavailable.
+
+Fix:
+
+Install Python Extension by Microsoft.
+
+------------------------------------------------
+
+ERROR 3
+
+az login not recognized
+
+Fix:
+
+Install Azure CLI.
+
+------------------------------------------------
+
+ERROR 4
+
+401 Unauthorized
+
+Cause:
+
+Not logged into Azure.
+
+Fix:
+
+az login
+
+------------------------------------------------
+
+ERROR 5
+
+403 Forbidden
+
+Cause:
+
+Wrong subscription.
+
+Fix:
+
+Verify Azure subscription.
+
+------------------------------------------------
+
+ERROR 6
+
+405 Method Not Allowed
+
+This is the exact issue you encountered.
+
+Typical Causes:
+
+1. Wrong endpoint
+2. Wrong API version
+3. Wrong base URL
+4. Incorrect responses path
+
+Debug Checklist:
+
+- Verify endpoint copied correctly
+- Verify agent published
+- Verify API version
+- Verify SDK version
+
+------------------------------------------------
+
+ERROR 7
+
+Internal Error Communicating with Agent
+
+Cause:
+
+Underlying request failed.
+
+Check:
+
+- Internet
+- Endpoint
+- Authentication
+- Azure login
+
+====================================================================
+SECTION 19: INTERVIEW QUESTIONS
+====================================================================
+
+Q1. What is Microsoft Foundry?
+
+Answer:
+
+A platform for building, deploying, evaluating,
+and managing AI applications and agents.
+
+------------------------------------------------
+
+Q2. What is an AI Agent?
+
+Answer:
+
+An AI system capable of reasoning and using tools
+to perform tasks beyond simple text generation.
+
+------------------------------------------------
+
+Q3. Why use Responses API?
+
+Answer:
+
+Provides unified support for conversational,
+agentic, and tool-enabled AI applications.
+
+------------------------------------------------
+
+Q4. What is Entra ID Authentication?
+
+Answer:
+
+Microsoft identity-based authentication system
+used to securely access Azure resources.
+
+------------------------------------------------
+
+Q5. Why use Virtual Environments?
+
+Answer:
+
+To isolate project dependencies and avoid conflicts.
+
+====================================================================
+SECTION 20: REVISION CHEAT SHEET
+====================================================================
+
+Foundry Toolkit
+→ VS Code Integration
+
+Agent
+→ AI assistant with tools
+
+gpt-4.1-mini
+→ Underlying model
+
+Web Search
+→ Agent tool
+
+az login
+→ Authenticate
+
+OpenAI Client
+→ Calls agent endpoint
+
+Responses API
+→ Generates response
+
+agent_client.py
+→ Backend communication layer
+
+app.py
+→ Flask frontend
+
+localhost:5000
+→ Local application URL
+
+====================================================================
+FINAL SUCCESS CHECKLIST
+====================================================================
+
+[ ] Azure account ready
+[ ] Foundry project created
+[ ] Foundry Toolkit installed
+[ ] Agent created
+[ ] Web Search tool added
+[ ] Python installed
+[ ] Venv created
+[ ] Azure SDK installed
+[ ] OpenAI SDK installed
+[ ] Azure login successful
+[ ] Agent endpoint copied
+[ ] .env configured
+[ ] Flask running
+[ ] Browser opens localhost:5000
+[ ] Agent answers questions
+[ ] End-to-end flow understood
+
+END OF MASTER NOTES
